@@ -1,0 +1,60 @@
+Let's make a game!
+name:Tabletop Tavern
+by:YourName
+desc:Run the busiest RPG table in town.
+
+Settings
+building cost increase:115%
+building cost refund:50%
+
+Resources
+*player|players
+name:Player|Players
+desc:The lifeblood of your tavern. More players, more chaos, more fun.
+
+*dice|dice
+name:Dice|Dice
+desc:Polyhedral dice. The fuel of every session.
+hidden when 0
+
+Buttons
+*hostSession
+name:Host a Session
+desc:Roll initiative and run a game. Earns 1 Player, with a chance at a Die.
+on click:yield 1 player
+on click:if (chance(10%)) yield 1 dice
+
+*rollDice
+name:Roll the Dice
+desc:Spend 1 Die to gain 3 Players.
+on click:if (dice >= 1) lose 1 dice
+on click:if (dice >= 1) yield 3 players
+req:1 dice:earned
+
+Buildings
+*gameTable|gameTables
+name:Game Table|Game Tables
+desc:A sturdy wooden table. Generates 1 Player every 5 seconds.
+cost:10 player
+on tick:yield 0.2 player
+unlocked
+
+*dmScreen|dmScreens
+name:Dungeon Master's Screen|Dungeon Master's Screens
+desc:A GM's best friend. Generates 1 Player per second.
+cost:50 player
+on tick:yield 1 player
+req:25 player:earned
+
+Upgrades
+*phb
+name:Player's Handbook
+desc:Multiply the yield of Host a Session by 2.
+cost:100 player
+req:50 player:earned
+
+Achievements
+*firstSession
+name:First Session
+desc:Host your very first session.
+req:1 hostSession:clicks
