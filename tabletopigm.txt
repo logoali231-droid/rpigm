@@ -82,9 +82,9 @@ show clicks
 *rollDice
 name:Roll the Dice
 desc:Spend 1 Dice to gain 5 Players and a chance at Inspiration.
-on click:if dice >= 1 and random(1,4) = 1 yield 1 inspiration
-on click:if dice >= 1 lose 1 dice
-on click:if dice >= 1 yield 5 players
+on click:if (dice >= 1 and chance(25%)) yield 1 inspiration
+on click:if (dice >= 1) lose 1 dice
+on click:if (dice >= 1) yield 5 players
 icon:https://placehold.co/64x64/ffffff/000000?text=D6
 req:1 dice:earned
 
