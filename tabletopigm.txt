@@ -34,7 +34,7 @@ class:resource-bar
 *middle
 contains:Buttons
 *right
-contains:Buildings,Upgrades,Achievements
+contains:Buildings, Upgrades, Achievements
 
 // ============================================================
 // RESOURCES
