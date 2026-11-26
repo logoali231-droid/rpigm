@@ -1,6 +1,6 @@
 Let's make a game!
 name:Tabletop Tavern
-by:YourName
+by:V
 desc:Run the busiest RPG table in town. Host sessions, collect dice, and build a gaming empire.<//>An idle game of dice, drama, and dungeon mastering.
 
 // ============================================================
@@ -79,12 +79,12 @@ icon:https://placehold.co/128x128/3d2b1a/e8d5b7?text=D20
 class:bigButton
 show clicks
 
-*rollDice
+**rollDice
 name:Roll the Dice
 desc:Spend 1 Dice to gain 5 Players and a chance at Inspiration.
-on click:if (dice >= 1) yield 5 players
-on click:if (dice >= 1) lose 1 dice
 on click:if (dice >= 1 and chance(25%)) yield 1 inspiration
+on click:if (dice >= 1) lose 1 dice
+on click:if (dice >= 1) yield 5 players
 icon:https://placehold.co/64x64/ffffff/000000?text=D6
 req:1 dice:earned
 
