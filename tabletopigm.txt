@@ -79,7 +79,7 @@ icon:https://placehold.co/128x128/3d2b1a/e8d5b7?text=D20
 class:bigButton
 show clicks
 
-*rollDice
+**rollDice
 name:Roll the Dice
 desc:Spend 1 Dice to gain 5 Players and a chance at Inspiration.
 on click:if (dice >= 1 and chance(25%)) yield 1 inspiration
