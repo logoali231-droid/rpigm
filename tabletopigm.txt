@@ -1,42 +1,103 @@
 Let's make a game!
 name:Tabletop Tavern
 by:YourName
-desc:Run the busiest RPG table in town.
+desc:Run the busiest RPG table in town. Host sessions, collect dice, and build a gaming empire.<//>An idle game of dice, drama, and dungeon mastering.
 
+// ============================================================
+// SETTINGS & VISUALS
+// ============================================================
 Settings
+background:https://images.unsplash.com/photo-1543857778-c4a1a3e0b2eb?q=80&w=1920&auto=format&fit=crop
 building cost increase:115%
 building cost refund:50%
 
+CSS
+/* Background overlay to make text readable */
+body { background: #1a110a !important; color: #e8d5b7 !important; font-family: "Georgia", serif !important; }
+#game { background: rgba(26, 17, 10, 0.85) !important; border: 4px solid #8b6b4a; border-radius: 15px; box-shadow: 0 0 30px #000; margin: 20px auto; max-width: 1200px; padding: 20px; }
+.thing { background: #3d2b1a !important; border: 2px solid #8b6b4a !important; border-radius: 8px !important; margin: 5px !important; padding: 8px !important; box-shadow: 3px 3px 0 #1a110a; transition: all 0.1s; }
+.thing:hover { background: #5a3f26 !important; border-color: #d4a373 !important; transform: scale(1.02); }
+.header { color: #f4a261 !important; text-shadow: 1px 1px 2px black; font-size: 1.2em; font-weight: bold; border-bottom: 2px solid #8b6b4a; padding-bottom: 5px; margin-bottom: 10px; }
+.bigButton { padding: 30px !important; border-radius: 50% !important; box-shadow: 0 0 40px #f4a261 !important; background: #8b6b4a !important; margin: 20px auto !important; width: 200px; height: 200px; display: flex; align-items: center; justify-content: center; }
+.bigButton img { width: 150px !important; height: 150px !important; }
+.bigButton:hover { box-shadow: 0 0 60px #f4a261 !important; }
+.resource-bar { background: #1a110a !important; border: 2px solid #8b6b4a !important; padding: 10px !important; border-radius: 8px; }
+.resource-bar .thing { display: inline-block !important; width: 150px; vertical-align: top; }
+
+// ============================================================
+// LAYOUT (Matches the Bunny Clicker style)
+// ============================================================
+Layout
+*top
+contains:Resources
+class:resource-bar
+*middle
+contains:Buttons
+*right
+contains:Buildings,Upgrades,Achievements
+
+// ============================================================
+// RESOURCES
+// ============================================================
 Resources
 *player|players
 name:Player|Players
-desc:The lifeblood of your tavern. More players, more chaos, more fun.
+desc:The lifeblood of your tavern. More players means more chaos and more fun.
+icon:https://placehold.co/64x64/8b6b4a/ffffff?text=Player
+show earned
+
+*gold|gold
+name:Gold|Gold
+desc:The universal currency. Earned by satisfied players.
+icon:https://placehold.co/64x64/d4a373/ffffff?text=Gold
+hidden when 0
 
 *dice|dice
 name:Dice|Dice
-desc:Polyhedral dice. The fuel of every session.
+desc:Polyhedral dice are the fuel of any RPG. Use them to boost your sessions.
+icon:https://placehold.co/64x64/ffffff/000000?text=D20
 hidden when 0
 
+*inspiration|inspiration
+name:Inspiration|Inspiration
+desc:A rare spark of creativity. Can be spent on powerful upgrades.
+icon:https://placehold.co/64x64/f4a261/ffffff?text=Star
+hidden when 0
+
+// ============================================================
+// BUTTONS
+// ============================================================
 Buttons
 *hostSession
 name:Host a Session
-desc:Roll initiative and run a game. Earns 1 Player, with a chance at a Die.
+desc:Roll initiative and run a game. Earns 1 Player and a chance at Dice or Inspiration.
 on click:yield 1 player
 on click:if (chance(10%)) yield 1 dice
+on click:if (chance(2%)) yield 1 inspiration
+on click:if (chance(1%)) yield 5 gold
+icon:https://placehold.co/128x128/3d2b1a/e8d5b7?text=D20
+class:bigButton
+show clicks
 
 *rollDice
 name:Roll the Dice
-desc:Spend 1 Die to gain 3 Players.
+desc:Spend 1 Dice to gain 5 Players and a chance at Inspiration.
 on click:if (dice >= 1) lose 1 dice
-on click:if (dice >= 1) yield 3 players
+on click:if (dice >= 1) yield 5 players
+on click:if (dice >= 1) if (chance(25%)) yield 1 inspiration
+icon:https://placehold.co/64x64/ffffff/000000?text=D6
 req:1 dice:earned
 
+// ============================================================
+// BUILDINGS
+// ============================================================
 Buildings
 *gameTable|gameTables
 name:Game Table|Game Tables
 desc:A sturdy wooden table. Generates 1 Player every 5 seconds.
 cost:10 player
 on tick:yield 0.2 player
+icon:https://placehold.co/64x64/8b6b4a/ffffff?text=Table
 unlocked
 
 *dmScreen|dmScreens
@@ -44,17 +105,138 @@ name:Dungeon Master's Screen|Dungeon Master's Screens
 desc:A GM's best friend. Generates 1 Player per second.
 cost:50 player
 on tick:yield 1 player
+icon:https://placehold.co/64x64/3d2b1a/ffffff?text=DM
 req:25 player:earned
 
+*snackBar|snackBars
+name:Snack Bar|Snack Bars
+desc:Selling chips and soda. Generates 0.5 Gold per second.
+cost:150 player
+on tick:yield 0.5 gold
+icon:https://placehold.co/64x64/d4a373/ffffff?text=Food
+req:1 gold:earned
+
+*paintingStudio|paintingStudios
+name:Miniature Studio|Miniature Studios
+desc:Produces 2 Dice per second.
+cost:250 player
+on tick:yield 2 dice
+icon:https://placehold.co/64x64/8b6b4a/ffffff?text=Paint
+req:5 dice:earned
+
+*tavern|taverns
+name:Tavern|Taverns
+desc:A dedicated space for gaming. Generates 10 Players per second.
+cost:500 player
+on tick:yield 10 player
+icon:https://placehold.co/64x64/8b6b4a/ffffff?text=House
+req:200 player:earned
+
+*conventionHall|conventionHalls
+name:Convention Hall|Convention Halls
+desc:A massive venue. Generates 100 Players per second and 2 Gold per second.
+cost:5000 player
+on tick:yield 100 player
+on tick:yield 2 gold
+icon:https://placehold.co/64x64/f4a261/ffffff?text=Con
+req:2000 player:earned
+
+// ============================================================
+// UPGRADES
+// ============================================================
 Upgrades
 *phb
 name:Player's Handbook
 desc:Multiply the yield of Host a Session by 2.
 cost:100 player
+passive:multiply yield of hostSession by 2
+icon:https://placehold.co/64x64/3d2b1a/ffffff?text=PHB
 req:50 player:earned
 
+*dmg
+name:Dungeon Master's Guide
+desc:Multiply the yield of all Game Tables by 2.
+cost:300 player
+passive:multiply yield of gameTable by 2
+icon:https://placehold.co/64x64/3d2b1a/ffffff?text=DMG
+req:10 gameTable
+
+*mm
+name:Monster Manual
+desc:Multiply the yield of all DM Screens by 2.
+cost:500 player
+passive:multiply yield of dmScreen by 2
+icon:https://placehold.co/64x64/3d2b1a/ffffff?text=MM
+req:10 dmScreen
+
+*metalDice
+name:Metal Dice
+desc:Multiply the yield of Roll the Dice by 2.
+cost:2 inspiration
+passive:multiply yield of rollDice by 2
+icon:https://placehold.co/64x64/ffffff/000000?text=Metal
+req:1 inspiration:earned
+
+*coffeeMachine
+name:Coffee Machine
+desc:Multiply the yield of all Snack Bars by 3.
+cost:10 inspiration
+passive:multiply yield of snackBar by 3
+icon:https://placehold.co/64x64/4a2b1a/ffffff?text=Coffee
+req:5 inspiration:earned
+
+*3dTerrain
+name:3D Terrain
+desc:Multiply the yield of all Miniature Studios by 2.
+cost:5000 player
+passive:multiply yield of paintingStudio by 2
+icon:https://placehold.co/64x64/8b6b4a/ffffff?text=3D
+req:10 paintingStudio
+
+// ============================================================
+// ACHIEVEMENTS
+// ============================================================
 Achievements
 *firstSession
 name:First Session
 desc:Host your very first session.
 req:1 hostSession:clicks
+icon:https://placehold.co/64x64/3d2b1a/ffffff?text=1
+
+*sessionMaster
+name:Session Master
+desc:Host 100 sessions.
+req:100 hostSession:clicks
+icon:https://placehold.co/64x64/3d2b1a/ffffff?text=100
+
+*tavernOwner
+name:Tavern Owner
+desc:Own 10 Taverns.
+req:10 tavern
+icon:https://placehold.co/64x64/3d2b1a/ffffff?text=Rich
+
+*diceCollector
+name:Dice Collector
+desc:Accumulate 100 Dice.
+req:100 dice:earned
+icon:https://placehold.co/64x64/3d2b1a/ffffff?text=Goblin
+
+// ============================================================
+// SHINIES (Random Clickable Events)
+// ============================================================
+Shinies
+*strayPlayer
+on click:yield 5 players
+on click:toast A wandering adventurer joins your table!
+movement:onRight moveLeft fade bounce:0.05
+frequency:120
+frequency variation:60
+icon:https://placehold.co/64x64/8b6b4a/ffffff?text=Hero
+
+*luckyDice
+on click:yield 2 dice
+on click:toast You find a lucky dice on the floor!
+movement:onLeft moveRight fade bounce:0.05
+frequency:180
+frequency variation:90
+icon:https://placehold.co/64x64/ffffff/000000?text=20
