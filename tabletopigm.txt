@@ -78,16 +78,14 @@ on click:if (chance(1%)) yield 5 gold
 icon:https://placehold.co/128x128/3d2b1a/e8d5b7?text=D20
 class:bigButton
 show clicks
-
 *rollDice
 name:Roll the Dice
 desc:Spend 1 Dice to gain 5 Players and a chance at Inspiration.
+on click:if (dice >= 1 and chance(25%)) yield 1 inspiration
 on click:if (dice >= 1) lose 1 dice
 on click:if (dice >= 1) yield 5 players
-on click:if (dice >= 1) if (chance(25%)) yield 1 inspiration
 icon:https://placehold.co/64x64/ffffff/000000?text=D6
 req:1 dice:earned
-
 // ============================================================
 // BUILDINGS
 // ============================================================
